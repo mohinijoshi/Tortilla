@@ -8,6 +8,7 @@
     <modules>
         <module>TortillaDB</module>
         <module>TortillaServices</module>
+        <module>TortillaUI</module>
     </modules>
     <packaging>pom</packaging>
 
