@@ -7,8 +7,8 @@ package com.tortilla.Service;
  * Time: 11:43 AM
  * To change this template use File | Settings | File Templates.
  */
-public class CallReport {
-    String id;
+public class CallReport implements java.io.Serializable {
+    int id;
     String call_report_type;
     String call_reports;
     String city;
@@ -18,11 +18,11 @@ public class CallReport {
     String first_name;
     String last_name;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
