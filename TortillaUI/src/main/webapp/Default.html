@@ -16,9 +16,16 @@
 <body>
 <div ng-app="myApp" ng-controller="customersCtrl">
 
-    <table>
+    <table border="1">
         <tr ng-repeat="x in names">
-            <td>{{ x }}</td>
+            <td>{{ x.id }}</td>
+            <td>{{ x.first_name}}</td>
+            <td>{{ x.last_name}}</td>
+            <td>{{ x.email}}</td>
+            <td>{{ x.call_report_type}}</td>
+            <td>{{ x.call_reports}}</td>
+            <td>{{ x.city}}</td>
+            <td>{{ x.country}}</td>
         </tr>
     </table>
 

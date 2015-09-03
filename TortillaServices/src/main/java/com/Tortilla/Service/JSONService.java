@@ -2,7 +2,6 @@ package com.tortilla.Service;
 
 import com.google.gson.Gson;
 import com.tortilla.db.SparkCassandraConnector;
-import org.apache.spark.api.java.function.Function;
 import org.apache.spark.sql.DataFrame;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.cassandra.CassandraSQLContext;
@@ -67,7 +66,7 @@ public class JSONService {
     @GET
     @Path("/get")
     @Produces(MediaType.APPLICATION_JSON)
-    public CallReport getCallReportInJSON() {
+    public List<CallReport> getCallReportInJSON() {
         SparkCassandraConnector connector = new SparkCassandraConnector();
         CassandraSQLContext sqlcontext = connector.GetCassandraSQLContext();
         sqlcontext.setKeyspace("crm");
@@ -77,28 +76,16 @@ public class JSONService {
         List<CallReport> lst = new ArrayList<CallReport>();
         Gson gson = new Gson();
 
-        List<CallReport> callReports = callreportsdata.javaRDD().map(new Function<Row, CallReport>() {
-            public CallReport call(Row row) {
-                CallReport callReport = new CallReport();
-                callReport.setId(row.getInt(0));
-                callReport.setCall_report_type(row.getString(1));
-                callReport.setCall_reports(row.getString(2));
-                callReport.setCity(row.getString(3));
-                callReport.setCountry(row.getString(4));
-                callReport.setEmail(row.getString(5));
-                callReport.setFirst_name(row.getString(6));
-                callReport.setLast_name(row.getString(7));
-                return callReport;
-            }
-        }).collect();
-        return callReports.get(0);
+        List<CallReport> callReports = callreportsdata.javaRDD().map(new CallReportFunction()).collect();
+        return callReports;
     }
 
     @POST
     @Path("/post")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createCallReportInJSON(CallReport callReport) {
-        String result = "CallReport saved : " + callReport;
+    public Response createCallReportInJSON(List<CallReport> callReports) {
+        Gson gson = new Gson();
+        String result = "CallReport saved : " + gson.toJson(callReports);
         return Response.status(201).entity(result).build();
     }
 }
