@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JobsAnalysis</title>
+    <!--Load the AJAX API-->
+    <script src="https://code.jquery.com/jquery-2.2.0.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+
+                var data = $.ajax({
+                 url: "http://localhost:8080/TortillaServices/Service/jobs/skill",
+                 dataType: "json",
+                 async: true,
+                 }).done(function(data){
+                   var jobsArray = [["skills","skills_Count"]];
+                   $.each(data, function() {
+                    var jobitem = [this.skills, this.skills_Count];
+                    jobsArray.push(jobitem);
+                    });
+
+                    var data = google.visualization.arrayToDataTable(jobsArray)
+
+                    var options = {'title':'How technology is popular in current market',
+                       'width':400,
+                       'height':300};
+
+                    var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+                    chart.draw(data, options);
+                });
+       }
+    </script>
+</head>
+<body>
+<!--Div that will hold the pie chart-->
+<div id="chart_div"></div>
+</body>
+</html>
